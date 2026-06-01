@@ -41,9 +41,11 @@
     overflow: hidden;
     box-shadow: 0 8px 40px rgba(26,46,74,0.13);
   }
+
+  /* ── HEADER ── */
   .chat-header {
     background: var(--navy);
-    padding: 18px 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -59,26 +61,30 @@
     background: radial-gradient(circle, rgba(0,163,180,0.25) 0%, transparent 70%);
     pointer-events: none;
   }
-  .header-logo {
-    width: 44px; height: 44px;
-    background: var(--teal);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
+  .header-photo {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--teal-light);
+    object-fit: cover;
     flex-shrink: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    font-family: 'Open Sans', sans-serif;
+    background: var(--teal);
   }
   .header-info h2 {
     font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: #fff;
+    letter-spacing: 0.2px;
   }
-  .header-info p {
+  .header-info .doctor-name {
     font-size: 12px;
-    color: rgba(255,255,255,0.6);
+    color: var(--teal-light);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+  .header-info .location {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
     margin-top: 3px;
     font-weight: 300;
   }
@@ -87,10 +93,12 @@
     width: 7px; height: 7px;
     background: #4dd9a0;
     border-radius: 50%;
-    margin-right: 5px;
+    margin-right: 4px;
     animation: pulse 2s infinite;
   }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── MESSAGES ── */
   .chat-messages {
     background: var(--off-white);
     min-height: 370px;
@@ -113,7 +121,14 @@
   .message.user { flex-direction: row-reverse; }
   .msg-avatar {
     width: 30px; height: 30px;
-    border-radius: 6px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    align-self: flex-end;
+  }
+  .msg-avatar-placeholder {
+    width: 30px; height: 30px;
+    border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 13px;
     font-weight: 700;
@@ -121,9 +136,8 @@
     flex-shrink: 0;
     align-self: flex-end;
     color: #fff;
+    background: var(--navy);
   }
-  .message.ai .msg-avatar { background: var(--teal); }
-  .message.user .msg-avatar { background: var(--navy); }
   .msg-bubble {
     max-width: 80%;
     padding: 11px 15px;
@@ -145,26 +159,41 @@
   .msg-bubble p { margin-bottom: 6px; }
   .msg-bubble p:last-child { margin-bottom: 0; }
   .msg-bubble strong { font-weight: 600; }
+
+  /* ── QUICK REPLIES ── */
   .quick-replies {
     display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
+    flex-direction: column;
+    gap: 6px;
     padding-left: 39px;
-    margin-top: 2px;
+    margin-top: 4px;
+  }
+  .quick-hint {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 2px;
+  }
+  .quick-btns-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
   }
   .quick-btn {
     background: var(--white);
     border: 1.5px solid var(--teal);
     color: var(--teal);
-    padding: 5px 13px;
+    padding: 5px 12px;
     border-radius: 20px;
-    font-size: 12.5px;
+    font-size: 12px;
     cursor: pointer;
     font-family: 'Lato', sans-serif;
     transition: all 0.18s;
     white-space: nowrap;
   }
   .quick-btn:hover { background: var(--teal); color: #fff; }
+
+  /* ── TYPING ── */
   .typing-indicator { display: flex; gap: 9px; align-items: flex-end; }
   .typing-dots {
     background: var(--white);
@@ -183,6 +212,8 @@
   .typing-dots span:nth-child(2){animation-delay:0.18s}
   .typing-dots span:nth-child(3){animation-delay:0.36s}
   @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+  /* ── INFO BAR ── */
   .info-bar {
     background: var(--teal-pale);
     border-top: 1px solid rgba(0,123,138,0.18);
@@ -192,6 +223,8 @@
     display: flex; align-items: center; gap: 6px;
   }
   .info-bar strong { color: var(--navy); }
+
+  /* ── INPUT ── */
   .chat-input-area {
     background: var(--white);
     border-top: 1px solid var(--border);
@@ -228,6 +261,8 @@
   .send-btn:hover { background: var(--teal-light); }
   .send-btn:disabled { background: var(--border); cursor: not-allowed; }
   .send-btn svg { width: 17px; height: 17px; }
+
+  /* ── FOOTER ── */
   .disclaimer {
     background: #f0f3f6;
     border-top: 1px solid var(--border);
@@ -240,84 +275,119 @@
   .chat-brand {
     background: var(--navy);
     text-align: center;
-    padding: 8px;
+    padding: 9px 16px;
     font-size: 11px;
     color: rgba(255,255,255,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
   .chat-brand span { color: var(--teal-light); }
+  .back-link {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 11px;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding-left: 12px;
+    transition: color 0.18s;
+  }
+  .back-link:hover { color: var(--teal-light); }
 </style>
 </head>
 <body>
 <div class="chat-wrapper">
+
+  <!-- HEADER -->
   <div class="chat-header">
-    <div class="header-logo">BIO</div>
+    <!--
+      FOTKA: Nahraďte src níže URL vaší fotky.
+      Fotku nahrajte na web (biostimulace.cz/foto.jpg) nebo použijte
+      Google Drive sdílený odkaz ve formátu:
+      https://drive.google.com/uc?export=view&id=VASE_ID
+    -->
+    <img
+      class="header-photo"
+      src="https://0697cca6f7.clvaw-cdnwnd.com/36649cfb7def49af09c33687e41af803/200000160-e5563e5565/file_000000006458720a8db31e94e22adbaa%20%281%29~2.jpeg?ph=0697cca6f7"
+      alt="Mgr. Jiří Kabát"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    />
+    <div class="header-photo" style="display:none; font-weight:700; font-size:13px; font-family:'Open Sans',sans-serif; color:#fff; background:var(--teal); align-items:center; justify-content:center;">JK</div>
     <div class="header-info">
       <h2>MedicGroup – online poradce</h2>
-      <p><span class="online-dot"></span>Biostimulace &amp; Biorezonance Praha · Hluboš</p>
+      <div class="doctor-name">Mgr. Jiří Kabát · Biostimulace &amp; Biorezonance</div>
+      <div class="location"><span class="online-dot"></span>Praha Zbraslav · Hluboš u Příbrami</div>
     </div>
   </div>
+
+  <!-- MESSAGES -->
   <div class="chat-messages" id="messages"></div>
+
+  <!-- INFO BAR -->
   <div class="info-bar">
     📞 Objednávky: <strong>+420 603 239 255</strong>&nbsp;&nbsp;|&nbsp;&nbsp;info@biostimulace.cz
   </div>
+
+  <!-- INPUT -->
   <div class="chat-input-area">
-    <textarea class="chat-input" id="userInput" placeholder="Napište svůj dotaz…" rows="1"></textarea>
+    <textarea
+      class="chat-input"
+      id="userInput"
+      placeholder="Popište svůj problém vlastními slovy…"
+      rows="1"
+    ></textarea>
     <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
         <line x1="22" y1="2" x2="11" y2="13"></line>
         <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
       </svg>
     </button>
   </div>
-  <div class="disclaimer">Informace mají orientační charakter a nenahrazují lékařskou péči. Pro objednání volejte +420 603 239 255.</div>
-  <div class="chat-brand">Poháněno <span>Claude AI</span> · MedicGroup Ambulance s.r.o.</div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    Informace mají orientační charakter a nenahrazují lékařskou péči. Pro objednání volejte +420 603 239 255.
+  </div>
+
+  <!-- BRAND + ZPĚT NA WEB -->
+  <div class="chat-brand">
+    <span>Poháněno Claude AI · MedicGroup Ambulance s.r.o.</span>
+    <a href="https://www.biostimulace.cz" target="_blank" class="back-link">← zpět na web</a>
+  </div>
+
 </div>
 
 <script>
 const MAKE_WEBHOOK = 'https://hook.eu2.make.com/c4efuydcqdwu5q3sj7h8gs4elh5osd4t';
 
-// Vyčistí text od JSON obálky a Markdown formátování
+const DOCTOR_PHOTO = 'https://0697cca6f7.clvaw-cdnwnd.com/36649cfb7def49af09c33687e41af803/200000160-e5563e5565/file_000000006458720a8db31e94e22adbaa%20%281%29~2.jpeg?ph=0697cca6f7'; // stejná URL jako v header-photo výše
+
 function cleanText(raw) {
   let text = raw || '';
-  
-  // Odstraní JSON obálku {"type":"text","text":"..."} 
   try {
     const parsed = JSON.parse(text);
-    if (parsed.text) text = parsed.text;
-    else if (parsed[0] && parsed[0].text) text = parsed[0].text;
+    if (parsed.content && parsed.content[0] && parsed.content[0].text) {
+      text = parsed.content[0].text;
+    } else if (parsed.text) {
+      text = parsed.text;
+    } else if (parsed[0] && parsed[0].text) {
+      text = parsed[0].text;
+    }
   } catch(e) {}
-  
-  // Odstraní JSON fragment na konci: "}text"
   text = text.replace(/\}text\s*$/, '').replace(/^\s*\{[^}]*\}\s*/, '');
-  
-  // Odstraní Markdown hlavičky ## a #
   text = text.replace(/#{1,3}\s+/g, '');
-  
-  // Odstraní hvězdičky pro tučné **text** → text
   text = text.replace(/\*\*(.*?)\*\*/g, '$1');
   text = text.replace(/\*(.*?)\*/g, '$1');
-  
-  // Nahradí \n za skutečné nové řádky
   text = text.replace(/\\n/g, '\n');
-  
-  // Odstraní nadměrné pomlčky ---
   text = text.replace(/---+/g, '');
-  
-  // Odstraní emoji na začátku řádků jako 📍 🏥 atd — necháme jen text
-  // (emoji v textu necháme, jen odstraníme přebytečné mezery)
   text = text.replace(/\n{3,}/g, '\n\n');
-  text = text.trim();
-  
-  return text;
+  return text.trim();
 }
 
 function formatMessage(text) {
-  // Rozdělí na odstavce a vytvoří HTML
   const paragraphs = text.split('\n\n').filter(p => p.trim());
-  if (paragraphs.length <= 1) {
-    // Jeden odstavec — nahradí \n za <br>
-    return text.replace(/\n/g, '<br>');
-  }
+  if (paragraphs.length <= 1) return text.replace(/\n/g, '<br>');
   return paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 }
 
@@ -325,34 +395,61 @@ function addMessage(role, text, quickReplies = []) {
   const messagesDiv = document.getElementById('messages');
   const wrapper = document.createElement('div');
   wrapper.className = `message ${role}`;
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.textContent = role === 'ai' ? 'BIO' : '👤';
+
+  // Avatar
+  if (role === 'ai') {
+    const img = document.createElement('img');
+    img.className = 'msg-avatar';
+    img.src = DOCTOR_PHOTO;
+    img.alt = 'JK';
+    img.onerror = function() {
+      const fallback = document.createElement('div');
+      fallback.className = 'msg-avatar-placeholder';
+      fallback.style.background = 'var(--teal)';
+      fallback.textContent = 'JK';
+      img.parentNode.replaceChild(fallback, img);
+    };
+    wrapper.appendChild(img);
+  } else {
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar-placeholder';
+    avatar.textContent = '👤';
+    wrapper.appendChild(avatar);
+  }
+
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
-  
   if (role === 'ai') {
-    const cleaned = cleanText(text);
-    bubble.innerHTML = formatMessage(cleaned);
+    bubble.innerHTML = formatMessage(cleanText(text));
   } else {
     bubble.textContent = text;
   }
-  
-  wrapper.appendChild(avatar);
   wrapper.appendChild(bubble);
   messagesDiv.appendChild(wrapper);
+
+  // Quick replies
   if (quickReplies.length > 0) {
-    const qr = document.createElement('div');
-    qr.className = 'quick-replies';
+    const qrWrapper = document.createElement('div');
+    qrWrapper.className = 'quick-replies';
+
+    const hint = document.createElement('div');
+    hint.className = 'quick-hint';
+    hint.textContent = 'Nebo napište svůj dotaz vlastními slovy ↓';
+    qrWrapper.appendChild(hint);
+
+    const row = document.createElement('div');
+    row.className = 'quick-btns-row';
     quickReplies.forEach(label => {
       const btn = document.createElement('button');
       btn.className = 'quick-btn';
       btn.textContent = label;
-      btn.onclick = () => { qr.remove(); sendUserMessage(label); };
-      qr.appendChild(btn);
+      btn.onclick = () => { qrWrapper.remove(); sendUserMessage(label); };
+      row.appendChild(btn);
     });
-    messagesDiv.appendChild(qr);
+    qrWrapper.appendChild(row);
+    messagesDiv.appendChild(qrWrapper);
   }
+
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
@@ -361,14 +458,20 @@ function showTyping() {
   const indicator = document.createElement('div');
   indicator.className = 'typing-indicator';
   indicator.id = 'typing';
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.style.background = '#007b8a';
-  avatar.textContent = 'BIO';
+  const img = document.createElement('img');
+  img.className = 'msg-avatar';
+  img.src = DOCTOR_PHOTO;
+  img.onerror = function() {
+    const fallback = document.createElement('div');
+    fallback.className = 'msg-avatar-placeholder';
+    fallback.style.background = 'var(--teal)';
+    fallback.textContent = 'JK';
+    img.parentNode.replaceChild(fallback, img);
+  };
   const dots = document.createElement('div');
   dots.className = 'typing-dots';
   dots.innerHTML = '<span></span><span></span><span></span>';
-  indicator.appendChild(avatar);
+  indicator.appendChild(img);
   indicator.appendChild(dots);
   messagesDiv.appendChild(indicator);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -412,7 +515,6 @@ function sendMessage() {
 document.getElementById('userInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
-
 document.getElementById('userInput').addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 110) + 'px';
@@ -421,8 +523,8 @@ document.getElementById('userInput').addEventListener('input', function() {
 window.addEventListener('load', () => {
   setTimeout(() => {
     addMessage('ai',
-      'Dobrý den! Jsem online poradce MedicGroup Ambulance. Trápí vás chronické potíže, alergie, únava nebo bolesti? Rád vám poradím, která z našich terapií by mohla pomoci.',
-      ['Biorezonance – co to je?', 'BBC diagnostika - co mi zjistí', 'Mám chronickou únavu', 'Mám bolesti a léky nepomáhají']
+      'Dobrý den! Jsem online poradce MedicGroup Ambulance. Popište mi prosím svůj problém – co vás trápí, jak dlouho a co jste již zkoušeli. Čím více napíšete, tím lépe vám poradím.',
+      ['Chronická únava a vyčerpání', 'Bolesti, které nelze léčbou zvládnout', 'Alergie nebo ekzém']
     );
   }, 350);
 });
