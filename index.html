@@ -142,6 +142,9 @@
     color: #fff;
     border-radius: 14px 3px 14px 14px;
   }
+  .msg-bubble p { margin-bottom: 6px; }
+  .msg-bubble p:last-child { margin-bottom: 0; }
+  .msg-bubble strong { font-weight: 600; }
   .quick-replies {
     display: flex;
     flex-wrap: wrap;
@@ -271,8 +274,52 @@
 </div>
 
 <script>
-// MAKE WEBHOOK URL - bezpečné, API klíč je skrytý v Make
 const MAKE_WEBHOOK = 'https://hook.eu2.make.com/c4efuydcqdwu5q3sj7h8gs4elh5osd4t';
+
+// Vyčistí text od JSON obálky a Markdown formátování
+function cleanText(raw) {
+  let text = raw || '';
+  
+  // Odstraní JSON obálku {"type":"text","text":"..."} 
+  try {
+    const parsed = JSON.parse(text);
+    if (parsed.text) text = parsed.text;
+    else if (parsed[0] && parsed[0].text) text = parsed[0].text;
+  } catch(e) {}
+  
+  // Odstraní JSON fragment na konci: "}text"
+  text = text.replace(/\}text\s*$/, '').replace(/^\s*\{[^}]*\}\s*/, '');
+  
+  // Odstraní Markdown hlavičky ## a #
+  text = text.replace(/#{1,3}\s+/g, '');
+  
+  // Odstraní hvězdičky pro tučné **text** → text
+  text = text.replace(/\*\*(.*?)\*\*/g, '$1');
+  text = text.replace(/\*(.*?)\*/g, '$1');
+  
+  // Nahradí \n za skutečné nové řádky
+  text = text.replace(/\\n/g, '\n');
+  
+  // Odstraní nadměrné pomlčky ---
+  text = text.replace(/---+/g, '');
+  
+  // Odstraní emoji na začátku řádků jako 📍 🏥 atd — necháme jen text
+  // (emoji v textu necháme, jen odstraníme přebytečné mezery)
+  text = text.replace(/\n{3,}/g, '\n\n');
+  text = text.trim();
+  
+  return text;
+}
+
+function formatMessage(text) {
+  // Rozdělí na odstavce a vytvoří HTML
+  const paragraphs = text.split('\n\n').filter(p => p.trim());
+  if (paragraphs.length <= 1) {
+    // Jeden odstavec — nahradí \n za <br>
+    return text.replace(/\n/g, '<br>');
+  }
+  return paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+}
 
 function addMessage(role, text, quickReplies = []) {
   const messagesDiv = document.getElementById('messages');
@@ -283,7 +330,14 @@ function addMessage(role, text, quickReplies = []) {
   avatar.textContent = role === 'ai' ? 'BIO' : '👤';
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
-  bubble.textContent = text;
+  
+  if (role === 'ai') {
+    const cleaned = cleanText(text);
+    bubble.innerHTML = formatMessage(cleaned);
+  } else {
+    bubble.textContent = text;
+  }
+  
   wrapper.appendChild(avatar);
   wrapper.appendChild(bubble);
   messagesDiv.appendChild(wrapper);
