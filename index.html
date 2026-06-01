@@ -349,6 +349,9 @@
   <div class="disclaimer">
     Informace mají orientační charakter a nenahrazují lékařskou péči. Pro objednání volejte +420 603 239 255.
   </div>
+  <div class="disclaimer" style="border-top:none; padding-top:0; display:flex; align-items:center; gap:5px;">
+    🔒 Chat je anonymní · konverzace jsou zaznamenávány pro zlepšení služby bez vazby na vaši totožnost · <a href="https://www.biostimulace.cz" target="_blank" style="color:var(--teal); text-decoration:underline;">zpracování dat dle GDPR</a>
+  </div>
 
   <!-- BRAND + ZPĚT NA WEB -->
   <div class="chat-brand">
@@ -523,7 +526,7 @@ document.getElementById('userInput').addEventListener('input', function() {
 window.addEventListener('load', () => {
   setTimeout(() => {
     addMessage('ai',
-      'Dobrý den! Jsem online poradce MedicGroup Ambulance. Popište mi prosím svůj problém – co vás trápí, jak dlouho a co jste již zkoušeli. Čím více napíšete, tím lépe vám poradím.',
+      'Dobrý den! Jsem online poradce MedicGroup Ambulance. Popište mi prosím svůj problém – co vás trápí, jak dlouho a co jste již zkoušeli. Čím více napíšete, tím lépe vám poradím.\n\n🔒 Soukromí: Nezadávejte prosím žádné osobní údaje (jméno, rodné číslo apod.). Chat je anonymní – zprávy se zaznamenávají pouze pro zlepšení kvality služby, bez vazby na vaši totožnost, v souladu s GDPR.',
       ['Chronická únava a vyčerpání', 'Bolesti, které nelze léčbou zvládnout', 'Alergie nebo ekzém']
     );
   }, 350);
